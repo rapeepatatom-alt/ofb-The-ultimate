@@ -1,130 +1,299 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roblox Script Hub - Get Key</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      background-color: #0b0f19;
-      color: #ffffff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      overflow: hidden;
-    }
-    .container {
-      background-color: #1a2234;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-      text-align: center;
-      max-width: 400px;
-      width: 90%;
-      border: 1px solid #2d3748;
-    }
-    h1 {
-      font-size: 22px;
-      margin-bottom: 10px;
-      color: #38bdf8;
-    }
-    p {
-      font-size: 14px;
-      color: #94a3b8;
-      margin-bottom: 20px;
-    }
-    .btn {
-      background: linear-gradient(135deg, #0284c7, #2563eb);
-      color: #ffffff;
-      border: none;
-      padding: 12px 24px;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.2s;
-      width: 100%;
-    }
-    .btn:hover {
-      transform: scale(1.02);
-      opacity: 0.9;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OFB Hub - Secure Script Gateway</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0f0f13;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            background: #1a1a24;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            border: 1px solid #2a2a3d;
+            z-index: 10;
+        }
+        h1 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #00ffcc;
+        }
+        p {
+            font-size: 14px;
+            color: #a0a0b0;
+            margin-bottom: 20px;
+        }
+        .box {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: #12121a;
+            border: 1px solid #33334d;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            text-align: center;
+        }
+        input:focus {
+            border-color: #00ffcc;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #00ffcc;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background: #00b386;
+        }
+        .secondary-btn {
+            background: #33334d;
+            color: #fff;
+        }
+        .secondary-btn:hover {
+            background: #44445c;
+        }
+        .status {
+            font-size: 13px;
+            margin-top: 10px;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            background: #12121a;
+            border: 1px solid #33334d;
+            border-radius: 8px;
+            color: #00ffcc;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            resize: none;
+            margin-bottom: 15px;
+        }
 
-    #scare-screen {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: #000;
-      z-index: 99999;
-      justify-content: center;
-      align-items: center;
-    }
-    #scare-video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+        /* หน้าจอนิ้วกลาง / จัมพ์สแกร์ดักบอท */
+        #bot-banned-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            z-index: 99999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ff4d4d;
+        }
+        .middle-finger {
+            font-size: 120px;
+            margin-bottom: 20px;
+            animation: bounce 0.3s infinite alternate;
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-15px); }
+        }
 
-    .glitch-flash {
-      animation: flash 0.1s infinite;
-    }
-    @keyframes flash {
-      0% { opacity: 1; filter: contrast(150%); }
-      50% { opacity: 0.8; filter: contrast(300%) hue-rotate(45deg); }
-      100% { opacity: 1; filter: contrast(150%); }
-    }
-  </style>
+        /* หน้าจอผีหลอนเต็มจอ (สำหรับคนพยายามเจาะ) */
+        #jumpscare-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            z-index: 99998;
+            justify-content: center;
+            align-items: center;
+        }
+        #jumpscare-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="container" id="ui-box">
-    <h1>⚡ Roblox Script Hub</h1>
-    <p>กดปุ่มด้านล่างเพื่อรับ Raw Script หรือ Get Key</p>
-    <button class="btn" onclick="triggerScare()">Get Script (คัดลอกสคริปต์)</button>
-  </div>
+    <!-- หน้าจอนิ้วกลาง -->
+    <div id="bot-banned-screen">
+        <div class="middle-finger">🖕</div>
+        <h1 style="color: #ff4d4d; font-size: 26px;">GET OUT!</h1>
+        <p style="color: #fff; margin-top: 10px;">ตรวจพบความพยายามเจาะระบบ หรือใช้บอทดูดสคริปต์</p>
+    </div>
 
-  <div id="scare-screen">
-    <!-- ใช้ลิงก์สตรีมตรงจาก Google Drive ของคุณ -->
-    <video id="scare-video" src="https://docs.google.com/uc?export=download&id=1yyD-sofw9OF3Z2Vb001bY4YS1rjVnUmm" playsinline preload="auto"></video>
-  </div>
+    <!-- หน้าจอผีหลอน -->
+    <div id="jumpscare-screen">
+        <img src="https://i.imgur.com/39aU444.jpg" alt="Scare">
+    </div>
 
-  <audio id="scream-audio" src="https://www.soundjay.com/human/sounds/scream-01.mp3" preload="auto"></audio>
+    <!-- เสียงกรี๊ดสำรอง -->
+    <audio id="scream-audio" preload="auto">
+        <source src="https://www.soundjay.com/human/sounds/screaming-woman-01.mp3" type="audio/mpeg">
+    </audio>
 
-  <script>
-    function triggerScare() {
-      document.getElementById('ui-box').style.display = 'none';
+    <div class="container" id="main-container">
+        <!-- ระบบที่ 1: หน้าจอตรวจสอบตัวตน -->
+        <div id="step-verify" class="active">
+            <h1>🛡️ Security Protection</h1>
+            <p>ระบบตรวจจับการเจาะระบบและความปลอดภัย 5 ชั้นกำลังทำงาน</p>
+            <div style="font-size: 40px; margin-bottom: 15px;">🔒</div>
+            <button onclick="passVerification()">ยืนยันตัวตนเพื่อเข้าสู่เว็บ</button>
+            <div id="security-log" class="status" style="color: #ff4d4d;"></div>
+        </div>
 
-      const scareScreen = document.getElementById('scare-screen');
-      scareScreen.style.display = 'flex';
-      scareScreen.classList.add('glitch-flash');
+        <!-- ระบบที่ 2: หน้ากรอก Key -->
+        <div id="step-key" class="box">
+            <h1>🔑 Key System</h1>
+            <p>กรุณากรอก Key หรือกดรับ Key ใหม่เพื่อปลดล็อกสคริปต์</p>
+            <input type="text" id="key-input" placeholder="ใส่ Key ของคุณที่นี่...">
+            <button onclick="verifyKey()">ตรวจสอบ Key</button>
+            <button class="secondary-btn" onclick="getKeyRedirect()">รับ Key (Get Key)</button>
+            <div id="key-status" class="status"></div>
+        </div>
 
-      const video = document.getElementById('scare-video');
-      video.muted = false;
-      video.volume = 1.0;
-      video.play().catch(err => console.log('Video play error:', err));
+        <!-- ระบบที่ 3-5: หน้าสคริปต์ตัวจริง -->
+        <div id="step-script" class="box">
+            <h1>🚀 OFB Script Hub</h1>
+            <p>ระบบความปลอดภัยสมบูรณ์ ปลดล็อกสคริปต์เรียบร้อย</p>
+            <textarea id="script-box" readonly>loadstring(game:HttpGet("https://raw.githubusercontent.com/rapeepatatom-alt/ofb-The-ultimate/main/script.lua"))()</textarea>
+            <button onclick="copyScript()">คัดลอกสคริปต์ (Copy Script)</button>
+        </div>
+    </div>
 
-      const audio = document.getElementById('scream-audio');
-      audio.volume = 1.0;
-      audio.play().catch(err => console.log('Audio play error:', err));
+    <script>
+        // ฟังก์ชันปลุกเสียง (ปลดล็อก Audio Context ทันทีที่มีการกดปุ่มครั้งแรก)
+        const audio = document.getElementById('scream-audio');
+        function unlockAudio() {
+            audio.play().then(() => {
+                audio.pause();
+                audio.currentTime = 0;
+            }).catch(() => {});
+        }
+        window.addEventListener('click', unlockAudio, { once: true });
 
-      if (navigator.vibrate) {
-        navigator.vibrate([300, 100, 400, 100, 600, 100, 1000]);
-      }
+        // ฟังก์ชันสั่งลงโทษ: เล่นเสียงผี + เด้งภาพผี/นิ้วกลาง
+        function triggerScareAndBan(type = 'finger') {
+            // เล่นเสียงกรี๊ด
+            audio.currentTime = 0;
+            audio.volume = 1.0;
+            audio.play().catch(e => console.log(e));
 
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen();
-      }
-    }
-  </script>
+            // สั่นมือถือ
+            if (navigator.vibrate) {
+                navigator.vibrate([500, 100, 500, 100, 500]);
+            }
+
+            // แสดงหน้าจอลงโทษ
+            if (type === 'ghost') {
+                document.getElementById('jumpscare-screen').style.display = 'flex';
+            } else {
+                document.getElementById('bot-banned-screen').style.display = 'flex';
+            }
+        }
+
+        // ระบบป้องกัน: ตรวจจับ Bot (WebDriver)
+        if (navigator.webdriver) {
+            triggerScareAndBan('finger');
+        }
+
+        // ระบบป้องกัน: บล็อกคลิกขวา และปุ่มลัด
+        document.addEventListener('contextmenu', e => {
+            e.preventDefault();
+            triggerScareAndBan('ghost'); // แอบคลิกขวาเจอภาพผีหลอนๆ
+        });
+        
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+                triggerScareAndBan('ghost'); // กด F12 เจอภาพผี + เสียงกรี๊ด
+            }
+        });
+
+        // ระบบป้องกัน: ตรวจจับ Developer Tools
+        setInterval(() => {
+            const widthThreshold = window.outerWidth - window.innerWidth > 160;
+            const heightThreshold = window.outerHeight - window.innerHeight > 160;
+            if (widthThreshold || heightThreshold) {
+                triggerScareAndBan('finger');
+            }
+        }, 1000);
+
+        function passVerification() {
+            if(navigator.webdriver) {
+                triggerScareAndBan('finger');
+                return;
+            }
+            document.getElementById('step-verify').classList.remove('active');
+            document.getElementById('step-key').classList.add('active');
+        }
+
+        const CORRECT_KEY = "OFB-VIP-2026"; 
+
+        function verifyKey() {
+            const userKey = document.getElementById('key-input').value.trim();
+            const status = document.getElementById('key-status');
+            
+            if(userKey === CORRECT_KEY) {
+                status.style.color = "#00ffcc";
+                status.innerText = "✅ คีย์ถูกต้อง! กำลังปลดล็อกระบบ...";
+                setTimeout(() => {
+                    document.getElementById('step-key').classList.remove('active');
+                    document.getElementById('step-script').classList.add('active');
+                }, 1000);
+            } else {
+                status.style.color = "#ff4d4d";
+                status.innerText = "❌ คีย์ไม่ถูกต้อง กรุณาลองใหม่!";
+            }
+        }
+
+        function getKeyRedirect() {
+            window.location.href = "https://linkvertise.com"; 
+        }
+
+        function copyScript() {
+            const copyText = document.getElementById("script-box");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+            alert("📋 คัดลอกสคริปต์สำเร็จ นำไปรันใน Roblox ได้เลย!");
+        }
+    </script>
 </body>
 </html>
+ 
