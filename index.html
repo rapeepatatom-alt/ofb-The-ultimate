@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roblox Script Hub - Get Key</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #0b0f19;
+      color: #ffffff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .container {
+      background-color: #1a2234;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      border: 1px solid #2d3748;
+    }
+    h1 {
+      font-size: 22px;
+      margin-bottom: 10px;
+      color: #38bdf8;
+    }
+    p {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-bottom: 20px;
+    }
+    .btn {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+      width: 100%;
+    }
+    .btn:hover {
+      transform: scale(1.02);
+      opacity: 0.9;
+    }
+
+    #scare-screen {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #000;
+      z-index: 99999;
+      justify-content: center;
+      align-items: center;
+    }
+    #scare-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .glitch-flash {
+      animation: flash 0.1s infinite;
+    }
+    @keyframes flash {
+      0% { opacity: 1; filter: contrast(150%); }
+      50% { opacity: 0.8; filter: contrast(300%) hue-rotate(45deg); }
+      100% { opacity: 1; filter: contrast(150%); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="ui-box">
+    <h1>⚡ Roblox Script Hub</h1>
+    <p>กดปุ่มด้านล่างเพื่อรับ Raw Script หรือ Get Key</p>
+    <button class="btn" onclick="triggerScare()">Get Script (คัดลอกสคริปต์)</button>
+  </div>
+
+  <div id="scare-screen">
+    <!-- ใช้ลิงก์สตรีมตรงจาก Google Drive ของคุณ -->
+    <video id="scare-video" src="https://docs.google.com/uc?export=download&id=1yyD-sofw9OF3Z2Vb001bY4YS1rjVnUmm" playsinline preload="auto"></video>
+  </div>
+
+  <audio id="scream-audio" src="https://www.soundjay.com/human/sounds/scream-01.mp3" preload="auto"></audio>
+
+  <script>
+    function triggerScare() {
+      document.getElementById('ui-box').style.display = 'none';
+
+      const scareScreen = document.getElementById('scare-screen');
+      scareScreen.style.display = 'flex';
+      scareScreen.classList.add('glitch-flash');
+
+      const video = document.getElementById('scare-video');
+      video.muted = false;
+      video.volume = 1.0;
+      video.play().catch(err => console.log('Video play error:', err));
+
+      const audio = document.getElementById('scream-audio');
+      audio.volume = 1.0;
+      audio.play().catch(err => console.log('Audio play error:', err));
+
+      if (navigator.vibrate) {
+        navigator.vibrate([300, 100, 400, 100, 600, 100, 1000]);
+      }
+
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      }
+    }
+  </script>
+</body>
+</html>
