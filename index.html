@@ -2,14 +2,14 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OFB Ultimate Hub - Script Protection</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Consolas', 'Courier New', monospace, sans-serif;
+            font-family: 'Consolas', 'Courier New', monospace;
         }
         body {
             background-color: #0a0a0f;
@@ -19,299 +19,158 @@
             align-items: center;
             min-height: 100vh;
             padding: 15px;
-            overflow-x: hidden;
+            overflow: hidden;
         }
-        .container {
+        .shield-box {
             background: #12121c;
-            padding: 25px;
-            border-radius: 14px;
+            border: 2px solid #00ffcc;
             box-shadow: 0 0 25px rgba(0, 255, 204, 0.2);
+            border-radius: 12px;
+            padding: 25px;
             width: 100%;
-            max-width: 480px;
+            max-width: 450px;
             text-align: center;
-            border: 1px solid #00ffcc;
-            position: relative;
-            z-index: 10;
         }
         h1 {
-            font-size: 24px;
             color: #00ffcc;
-            text-shadow: 0 0 8px rgba(0,255,204,0.6);
-            margin-bottom: 4px;
-        }
-        .brand {
-            font-size: 11px;
-            color: #ff3366;
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 18px;
-        }
-        p {
-            font-size: 13px;
-            color: #a0a0c0;
-            margin-bottom: 15px;
-        }
-        .box {
-            display: none;
-        }
-        .active {
-            display: block;
-        }
-        textarea {
-            width: 100%;
-            background: #090910;
-            border: 1px solid #00ffcc;
-            border-radius: 8px;
-            color: #00ffcc;
-            padding: 12px;
-            font-size: 13px;
-            margin-bottom: 12px;
-            outline: none;
-            height: 120px;
-            resize: none;
-        }
-        button {
-            width: 100%;
-            padding: 13px;
-            background: #00ffcc;
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            transition: 0.2s;
+            font-size: 22px;
             margin-bottom: 10px;
-            text-transform: uppercase;
-            box-shadow: 0 0 10px rgba(0,255,204,0.4);
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
         }
-        button:hover {
-            background: #00cca3;
+        .status {
+            color: #ffaa00;
+            font-size: 14px;
+            margin-bottom: 15px;
+            font-weight: bold;
         }
-        .btn-red {
-            background: #ff3366;
-            color: #fff;
-            box-shadow: 0 0 10px rgba(255,51,102,0.4);
-        }
-        .btn-red:hover {
-            background: #cc0033;
-        }
-        .link-output {
-            background: #050508;
+        .info-box {
+            background: #1a1a26;
             border: 1px dashed #00ffcc;
-            padding: 10px;
+            padding: 12px;
             border-radius: 6px;
-            font-size: 11px;
-            color: #fff;
-            margin-bottom: 12px;
-            word-break: break-all;
-            user-select: all;
-        }
-        .ip-box {
-            background: #181824;
-            border: 1px solid #ff3366;
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 12px;
-            color: #ff3366;
-            margin-bottom: 12px;
-        }
-
-        #bot-screen {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000; z-index: 99999;
-            flex-direction: column; justify-content: center; align-items: center;
-            color: #ff3366; text-align: center;
+            font-size: 13px;
+            color: #00ffcc;
+            margin-bottom: 20px;
+            text-align: left;
+            line-height: 1.6;
         }
         .middle-finger {
-            font-size: 130px;
-            animation: pulse 0.2s infinite alternate;
+            font-size: 90px;
+            margin: 15px 0;
+            animation: pulse 0.8s infinite alternate;
         }
         @keyframes pulse {
-            from { transform: scale(1); }
-            to { transform: scale(1.2); }
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); }
         }
-
-        #scare-screen {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000; z-index: 99998;
-            justify-content: center; align-items: center;
+        .warning-text {
+            color: #ff0055;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1.5;
         }
-        #scare-screen img {
-            width: 100%; height: 100%; object-fit: cover;
-            animation: shake 0.05s infinite;
-        }
-        @keyframes shake {
-            0% { transform: translate(3px, 3px) rotate(0deg); }
-            50% { transform: translate(-3px, -3px) rotate(1deg); }
-            100% { transform: translate(3px, -3px) rotate(-1deg); }
+        .script-locked {
+            background: #0d0d14;
+            border: 1px solid #ff0055;
+            color: #ff0055;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
-    <div id="bot-screen">
-        <div class="middle-finger">🖕</div>
-        <h1 style="color: #ff3366; font-size: 32px; margin-top: 10px;">BOT DETECTED!</h1>
-        <p style="color: #fff;">ระบบความปลอดภัย OFB ไม่อนุญาตให้ใช้บอทเข้าถึง!</p>
-    </div>
-
-    <div id="scare-screen">
-        <img id="ghost-img" src="https://i.imgur.com/39aU444.jpg" alt="Ghost">
-    </div>
-
-    <div class="container">
+    <div class="shield-box" id="mainCard">
         <h1>OFB HUB SHIELD</h1>
-        <div class="brand">[ LUAU PROTECT SYSTEM ]</div>
-
-        <!-- MODE 1: หน้าสร้างลิงก์ -->
-        <div id="mode-create" class="box">
-            <p>📌 วางสคริปต์ Luau ของคุณที่นี่ เพื่อสร้างลิงก์ป้องกัน:</p>
-            <textarea id="input-script" placeholder="-- วางสคริปต์ Luau ที่นี่..."></textarea>
-            <button onclick="generateOFBLink()">🔒 สร้างลิงก์ป้องกัน</button>
-            <div id="created-result" style="display:none;">
-                <p style="color:#00ffcc; margin-top:10px;">✅ สร้างลิงก์สำเร็จ:</p>
-                <div class="link-output" id="generated-url"></div>
-                <button class="btn-red" onclick="copyGeneratedLink()">📋 คัดลอกลิงก์</button>
-            </div>
+        <div class="status">[ LUAU PROTECT SYSTEM ]</div>
+        
+        <div class="info-box" id="userInfo">
+            กำลังตรวจสอบอุปกรณ์และความปลอดภัย...
         </div>
 
-        <!-- MODE 2: หน้าดักเหยื่อ -->
-        <div id="mode-shield" class="box">
-            <p>🛡️ ระบบความปลอดภัย OFB ตรวจพบการเชื่อมต่อ</p>
-            <div class="ip-box" id="target-ip">🔍 กำลังตรวจสอบ IP Address...</div>
-            <div style="font-size: 40px; margin: 10px 0;">⚡</div>
-            <button onclick="verifyAndReveal()">กดเพื่อรับสคริปต์ Luau</button>
-        </div>
-
-        <!-- MODE 3: หน้าปลดล็อกสคริปต์ให้เหยื่อ -->
-        <div id="mode-locked" class="box">
-            <h2 style="color: #00ffcc; margin-bottom: 10px;">SUCCESS!</h2>
-            <p style="color: #fff;">สคริปต์ Luau ของคุณพร้อมใช้งานแล้ว:</p>
-            <textarea id="decoded-script" readonly style="height:120px; font-size:11px;"></textarea>
-            <button onclick="copyDecodedScript()">📋 คัดลอกสคริปต์</button>
+        <div class="script-locked">
+            🔒 สคริปต์ถูกปิดล็อกถาวร<br>
+            ไม่อนุญาตให้คัดลอกหรือเข้าถึงผ่านระบบภายนอก!
         </div>
     </div>
 
     <script>
-        // 🚨 ฝัง Discord Webhook URL เรียบร้อยแล้วครับ!
-        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1559076293100703744/azwSwWi5plZAK-wwyyEtgd0nIvgtAr4jugmilvE_88kStwX9p6q75dEp9zOXtX-Je7Ul"; 
+        // เช็กว่าเป็น บอท / Crawler / สคริปต์เจาะ หรือไม่
+        function isBotOrScraper() {
+            const ua = navigator.userAgent.toLowerCase();
+            const botKeywords = [
+                'bot', 'spider', 'crawler', 'python', 'curl', 'wget', 
+                'httpclient', 'headless', 'phantomjs', 'selenium', 'puppeteer', 'axios'
+            ];
+            
+            // เช็กจาก User-Agent
+            for (let keyword of botKeywords) {
+                if (ua.includes(keyword)) return true;
+            }
+            // เช็กคุณสมบัติบอท Headless
+            if (navigator.webdriver) return true;
+            return false;
+        }
 
-        let userIpAddress = "Unknown IP";
+        // ฟังก์ชันแสดงหน้านิ้วกลาง (สำหรับบอท/ผู้บุกรุก)
+        function triggerMiddleFinger(reason) {
+            document.getElementById('mainCard').style.borderColor = '#ff0055';
+            document.getElementById('mainCard').style.boxShadow = '0 0 30px rgba(255, 0, 85, 0.6)';
+            document.getElementById('mainCard').innerHTML = `
+                <h1 style="color: #ff0055;">BOT DETECTED!</h1>
+                <div class="status" style="color: #ff0055;">[ SECURITY VIOLATION ]</div>
+                <div class="middle-finger">🖕</div>
+                <div class="warning-text">
+                    คิดจะเจาะสคริปต์เหรอไอตัวจ้ำสแกดเด้ย!<br>
+                    (${reason})
+                </div>
+            `;
+        }
 
-        // ดึง IP และแจ้งเตือนเข้า Discord ทันทีเมื่อมีคนเข้าเว็บ
+        // ดึง IP + รุ่นมือถือโชว์
         fetch('https://api.ipify.org?format=json')
-            .then(res => res.json())
+            .then(response => response.json())
             .then(data => {
-                userIpAddress = data.ip;
-                const ipElem = document.getElementById('target-ip');
-                if(ipElem) {
-                    ipElem.innerHTML = `⚠️ IP ของคุณ: <span style="color:#00ffcc;">${userIpAddress}</span> ถูกบันทึกแล้ว!`;
-                }
-                sendDiscordAlert("🌐 มีคนเปิดเข้าลิงก์ OFB Hub!", `**IP:** \`${userIpAddress}\`\n**User-Agent:** \`${navigator.userAgent}\``);
+                const ip = data.ip;
+                const ua = navigator.userAgent;
+                let device = "PC / Unknown";
+                
+                if (/android/i.test(ua)) device = "Android Device";
+                else if (/iphone|ipad|ipod/i.test(ua)) device = "iOS Device";
+                else if (/windows/i.test(ua)) device = "Windows PC";
+
+                document.getElementById('userInfo').innerHTML = 
+                    `🌐 <b>IP Address:</b> ${ip}<br>📱 <b>Device:</b> ${device}<br>🛡️ <b>Status:</b> Verified Normal User`;
             })
-            .catch(() => {});
+            .catch(() => {
+                document.getElementById('userInfo').innerHTML = 
+                    `🌐 <b>IP Address:</b> Hidden/Protected<br>📱 <b>Device:</b> Web Browser<br>🛡️ <b>Status:</b> Verified Normal User`;
+            });
 
-        // ฟังก์ชันส่งแจ้งเตือนเข้า Discord
-        function sendDiscordAlert(title, message) {
-            if(!DISCORD_WEBHOOK_URL) return;
-            fetch(DISCORD_WEBHOOK_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    username: "OFB Security Bot",
-                    avatar_url: "https://i.imgur.com/39aU444.jpg",
-                    embeds: [{ 
-                        title: title, 
-                        description: message, 
-                        color: 65280, // สีเขียว
-                        timestamp: new Date().toISOString()
-                    }]
-                })
-            }).catch(e => {});
+        // ถ้าระบบตรวจเจอว่าเป็นบอท โชว์นิ้วกลางทันที!
+        if (isBotOrScraper()) {
+            triggerMiddleFinger("Detected Bot/Automated Tool");
         }
 
-        let actx;
-        function playUltraScream() {
-            try {
-                if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
-                if (actx.state === 'suspended') actx.resume();
-                let o1 = actx.createOscillator(), g1 = actx.createGain();
-                o1.type = 'sawtooth';
-                o1.frequency.setValueAtTime(4500, actx.currentTime);
-                o1.frequency.exponentialRampToValueAtTime(600, actx.currentTime + 2.0);
-                g1.gain.setValueAtTime(1, actx.currentTime);
-                g1.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 2.0);
-                o1.connect(g1); g1.connect(actx.destination);
-                o1.start(); o1.stop(actx.currentTime + 2.0);
-            } catch(e){}
-        }
+        // ถ้าพยายามกด F12 / Inspect / คลิกขวา เพื่อเจาะซอร์สโค้ด -> โชว์นิ้วกลางทันที!
+        document.addEventListener('contextmenu', event => {
+            event.preventDefault();
+            triggerMiddleFinger("Attempted Right-Click / Inspect");
+        });
 
-        function triggerJumpscare(isBot = false) {
-            playUltraScream();
-            sendDiscordAlert("👻 มีคนกดโดนระบบ Jumpscare / บอท!", `**IP:** \`${userIpAddress}\``);
-            if (navigator.vibrate) navigator.vibrate([600, 100, 600, 100, 800]);
-            if (isBot) {
-                document.getElementById('bot-screen').style.display = 'flex';
-            } else {
-                document.getElementById('scare-screen').style.display = 'flex';
+        document.addEventListener('keydown', event => {
+            // ดักจับ F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+            if (event.keyCode == 123 || 
+               (event.ctrlKey && event.shiftKey && (event.keyCode == 73 || event.keyCode == 74)) || 
+               (event.ctrlKey && event.keyCode == 85)) {
+                event.preventDefault();
+                triggerMiddleFinger("Attempted DevTools / Source Inspection");
+                return false;
             }
-        }
-
-        if (navigator.webdriver) { triggerJumpscare(true); }
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const encodedData = urlParams.get('data');
-
-        if (encodedData) {
-            document.getElementById('mode-shield').classList.add('active');
-        } else {
-            document.getElementById('mode-create').classList.add('active');
-        }
-
-        function generateOFBLink() {
-            const rawScript = document.getElementById('input-script').value.trim();
-            if (!rawScript) {
-                alert("ใส่สคริปต์ Luau ก่อนน้องชาย!");
-                return;
-            }
-            const safeB64 = btoa(encodeURIComponent(rawScript));
-            const currentURL = window.location.origin + window.location.pathname;
-            document.getElementById('generated-url').innerText = `${currentURL}?data=${safeB64}`;
-            document.getElementById('created-result').style.display = 'block';
-        }
-
-        function copyGeneratedLink() {
-            navigator.clipboard.writeText(document.getElementById('generated-url').innerText);
-            alert("📋 คัดลอกลิงก์สำเร็จ!");
-        }
-
-        function verifyAndReveal() {
-            if (navigator.webdriver) { triggerJumpscare(true); return; }
-
-            sendDiscordAlert("🎯 มีคนกดขอรับสคริปต์ Luau!", `**IP:** \`${userIpAddress}\``);
-
-            try {
-                const decodedRaw = decodeURIComponent(atob(encodedData));
-                document.getElementById('decoded-script').value = decodedRaw;
-            } catch(e) {
-                document.getElementById('decoded-script').value = "-- Error loading script";
-            }
-
-            document.getElementById('mode-shield').classList.remove('active');
-            document.getElementById('mode-locked').classList.add('active');
-        }
-
-        function copyDecodedScript() {
-            const copyText = document.getElementById('decoded-script');
-            copyText.select();
-            navigator.clipboard.writeText(copyText.value);
-            alert("📋 คัดลอกสคริปต์ Luau สำเร็จ!");
-        }
+        });
     </script>
+
 </body>
 </html>
