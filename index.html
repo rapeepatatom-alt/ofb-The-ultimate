@@ -33,8 +33,15 @@
         }
         h1 {
             font-size: 22px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             color: #00ffcc;
+        }
+        .brand-subtitle {
+            font-size: 12px;
+            color: #ff4d4d;
+            font-weight: bold;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
         }
         p {
             font-size: 14px;
@@ -91,7 +98,7 @@
         }
         textarea {
             width: 100%;
-            height: 120px;
+            height: 100px;
             background: #12121a;
             border: 1px solid #33334d;
             border-radius: 8px;
@@ -100,7 +107,14 @@
             font-family: monospace;
             font-size: 12px;
             resize: none;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+        }
+        .script-label {
+            font-size: 12px;
+            color: #00ffcc;
+            text-align: left;
+            margin-bottom: 5px;
+            font-weight: bold;
         }
 
         /* หน้าจอนิ้วกลางดักบอท */
@@ -162,15 +176,16 @@
         <img src="https://i.imgur.com/39aU444.jpg" alt="Scare">
     </div>
 
-    <!-- เสียงกรี๊ด -->
+    <!-- เสียงสำรอง -->
     <audio id="scream-audio" preload="auto">
-        <source src="https://www.soundjay.com/human/sounds/screaming-woman-01.mp3" type="audio/mpeg">
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a73180.mp3" type="audio/mpeg">
     </audio>
 
     <div class="container" id="main-container">
-        <!-- หน้ายืนยันตัวตน (ไม่บอกจำนวนระบบ) -->
+        <!-- หน้ายืนยันตัวตน -->
         <div id="step-verify" class="active">
             <h1>🛡️ Security Gate</h1>
+            <div class="brand-subtitle">[ OFB SYSTEM ]</div>
             <p>กรุณายืนยันตัวตนเพื่อเข้าใช้งานระบบ</p>
             <div style="font-size: 40px; margin-bottom: 15px;">🔒</div>
             <button onclick="passVerification()">เข้าสู่หน้ากรอก Key</button>
@@ -180,6 +195,7 @@
         <!-- หน้ากรอก Key -->
         <div id="step-key" class="box">
             <h1>🔑 Key System</h1>
+            <div class="brand-subtitle">[ OFB SYSTEM ]</div>
             <p>กรุณากรอก Key เพื่อเข้าถึงสคริปต์</p>
             <input type="text" id="key-input" placeholder="ใส่ Key ของคุณที่นี่...">
             <button onclick="verifyKey()">ตรวจสอบ Key</button>
@@ -187,34 +203,55 @@
             <div id="key-status" class="status"></div>
         </div>
 
-        <!-- หน้าสคริปต์จริง -->
+        <!-- หน้าสคริปต์จริง (ช่องใส่สคริปต์ย่อ/กำหนดเอง) -->
         <div id="step-script" class="box">
             <h1>🚀 OFB Script Hub</h1>
+            <div class="brand-subtitle">[ OFB SYSTEM ]</div>
             <p>ยืนยันตัวตนสำเร็จ!</p>
-            <textarea id="script-box" readonly>loadstring(game:HttpGet("https://raw.githubusercontent.com/rapeepatatom-alt/ofb-The-ultimate/main/script.lua"))()</textarea>
+            
+            <div class="script-label">📌 ใส่หรือแก้ไขสคริปต์ของคุณที่นี่:</div>
+            <textarea id="script-box">loadstring(game:HttpGet("https://raw.githubusercontent.com/rapeepatatom-alt/ofb-The-ultimate/main/script.lua"))()</textarea>
+            
             <button onclick="copyScript()">คัดลอกสคริปต์ (Copy Script)</button>
         </div>
     </div>
 
     <script>
-        const audio = document.getElementById('scream-audio');
-        function unlockAudio() {
-            audio.play().then(() => {
-                audio.pause();
+        let audioCtx;
+        function playScreamSound() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(3000, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 1.5);
+                gain.gain.setValueAtTime(1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 1.5);
+            } catch(e) {}
+
+            const audio = document.getElementById('scream-audio');
+            if(audio) {
                 audio.currentTime = 0;
-            }).catch(() => {});
+                audio.volume = 1.0;
+                audio.play().catch(e => console.log(e));
+            }
         }
-        window.addEventListener('click', unlockAudio, { once: true });
 
         function triggerScareAndBan(type = 'ghost') {
-            audio.currentTime = 0;
-            audio.volume = 1.0;
-            audio.play().catch(e => console.log(e));
-
+            playScreamSound();
             if (navigator.vibrate) {
                 navigator.vibrate([500, 100, 500, 100, 500]);
             }
-
             if (type === 'ghost') {
                 document.getElementById('jumpscare-screen').style.display = 'flex';
             } else {
@@ -222,12 +259,10 @@
             }
         }
 
-        // ดักบอท
         if (navigator.webdriver) {
             triggerScareAndBan('finger');
         }
 
-        // ดักการคลิกขวา / ปุ่มลัด
         document.addEventListener('contextmenu', e => {
             e.preventDefault();
             triggerScareAndBan('ghost');
@@ -241,6 +276,13 @@
         });
 
         function passVerification() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
             if(navigator.webdriver) {
                 triggerScareAndBan('finger');
                 return;
@@ -265,9 +307,7 @@
                 }, 1000);
             } else {
                 wrongAttempts++;
-                
                 if (wrongAttempts >= 2) {
-                    // ผิด 2 รอบ โดนผีหลอนทันที
                     triggerScareAndBan('ghost');
                 } else {
                     status.style.color = "#ff4d4d";
