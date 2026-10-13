@@ -12,137 +12,161 @@
             font-family: 'Consolas', 'Courier New', monospace;
         }
         body {
-            background-color: #050508;
+            background-color: #0a0a0f;
             color: #00ffcc;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 15px;
+            overflow: hidden;
         }
         .shield-box {
-            background: #0b0b12;
-            border: 1px solid #005544;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.15);
-            border-radius: 16px;
-            padding: 30px 20px;
+            background: #12121c;
+            border: 2px solid #00ffcc;
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2);
+            border-radius: 12px;
+            padding: 25px;
             width: 100%;
-            max-width: 420px;
+            max-width: 450px;
             text-align: center;
         }
         h1 {
             color: #00ffcc;
             font-size: 22px;
-            letter-spacing: 2px;
-            margin-bottom: 6px;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
         }
-        .subtitle {
-            color: #ff0055;
-            font-size: 12px;
-            letter-spacing: 1px;
-            margin-bottom: 25px;
-            font-weight: bold;
-        }
-        .success-title {
-            color: #00ffcc;
-            font-size: 20px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            text-shadow: 0 0 8px rgba(0, 255, 204, 0.4);
-        }
-        .description {
-            color: #cccccc;
+        .status {
+            color: #ffaa00;
             font-size: 14px;
-            margin-bottom: 18px;
-        }
-        .script-box {
-            width: 100%;
-            height: 140px;
-            background: #040406;
-            border: 1px solid #005544;
-            border-radius: 10px;
-            color: #00ffcc;
-            padding: 12px;
-            font-size: 13px;
-            resize: none;
-            outline: none;
-            margin-bottom: 20px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
-        }
-        .copy-btn {
-            width: 100%;
-            background: #00ffcc;
-            color: #000000;
-            border: none;
-            padding: 14px;
-            font-size: 15px;
+            margin-bottom: 15px;
             font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: 0.2s;
         }
-        .copy-btn:hover {
-            background: #00e6b8;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.7);
+        .info-box {
+            background: #1a1a26;
+            border: 1px dashed #00ffcc;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #00ffcc;
+            margin-bottom: 20px;
+            text-align: left;
+            line-height: 1.6;
+        }
+        .middle-finger {
+            font-size: 90px;
+            margin: 15px 0;
+            animation: pulse 0.8s infinite alternate;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); }
+        }
+        .warning-text {
+            color: #ff0055;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+        .script-locked {
+            background: #0d0d14;
+            border: 1px solid #ff0055;
+            color: #ff0055;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
-    <div class="shield-box">
+    <div class="shield-box" id="mainCard">
         <h1>OFB HUB SHIELD</h1>
-        <div class="subtitle">[ LUAU PROTECT SYSTEM ]</div>
+        <div class="status">[ LUAU PROTECT SYSTEM ]</div>
         
-        <div class="success-title">SUCCESS !</div>
-        <div class="description">สคริปต์ Luau ของคุณพร้อมใช้งานแล้ว :</div>
+        <div class="info-box" id="userInfo">
+            กำลังตรวจสอบอุปกรณ์และความปลอดภัย...
+        </div>
 
-        <!-- ช่องใส่ข้อความสคริปต์ -->
-        <textarea class="script-box" readonly id="scriptText">loadstring(game:HttpGet("https://raw.githubusercontent.com/rapeepatatom-alt/ofb-The-ultimate/main/script.lua"))()</textarea>
-
-        <!-- ปุ่มคัดลอกลิงก์สคริปต์ -->
-        <button class="copy-btn" onclick="copyLink()">
-            📋 คัดลอกลิงก์สคริปต์
-        </button>
+        <div class="script-locked">
+            🔒 สคริปต์ถูกปิดล็อกถาวร<br>
+            ไม่อนุญาตให้คัดลอกหรือเข้าถึงผ่านระบบภายนอก!
+        </div>
     </div>
 
     <script>
-        // ลิงก์เว็บผี / ฮาโลวีน
-        const HALLOWEEN_URL = "https://jonathanbassedas.github.io/halloween/?fbclid=PAT01DUAUx2fNleHRuA2FlbQIxMABwZG9mAnNydGMGYXBwX2lkDzU2NzA2NzM0MzM1MjQyNwABp0aFNPxW06myDtPR_ZSIU4qwPmFdYQTiE6aSCePjat2jBpx4qYSEpmHYYrzs_aem_0DUYjEMtNcSEIdSNDLjj5w";
-
-        // ตรวจจับว่าถ้ามีคนเปิดหน้าเว็บนี้ตรงๆ ผ่าน Web Browser (Google, Safari) หรือพยายามเปิด F12/Inspect ให้เด้งไปเว็บฮาโลวีนทันที
-        function checkBrowserAccess() {
-            const userAgent = navigator.userAgent.toLowerCase();
-            // ถ้าไม่ใช่การเรียกใช้ผ่านเกม หรือเป็น Browser ทั่วไป ให้สั่ง Redirect
-            if (window.location.search.includes("inspect") || document.referrer.includes("google")) {
-                window.location.href = HALLOWEEN_URL;
+        // เช็กว่าเป็น บอท / Crawler / สคริปต์เจาะ หรือไม่
+        function isBotOrScraper() {
+            const ua = navigator.userAgent.toLowerCase();
+            const botKeywords = [
+                'bot', 'spider', 'crawler', 'python', 'curl', 'wget', 
+                'httpclient', 'headless', 'phantomjs', 'selenium', 'puppeteer', 'axios'
+            ];
+            
+            // เช็กจาก User-Agent
+            for (let keyword of botKeywords) {
+                if (ua.includes(keyword)) return true;
             }
+            // เช็กคุณสมบัติบอท Headless
+            if (navigator.webdriver) return true;
+            return false;
         }
 
-        // ฟังก์ชันคัดลอกลิงก์สคริปต์
-        function copyLink() {
-            const scriptText = document.getElementById('scriptText');
-            scriptText.select();
-            document.execCommand('copy');
-            alert('คัดลอกลิงก์สคริปต์เรียบร้อยแล้ว! นำไปวางรันในตัวเกมได้เลย');
+        // ฟังก์ชันแสดงหน้านิ้วกลาง (สำหรับบอท/ผู้บุกรุก)
+        function triggerMiddleFinger(reason) {
+            document.getElementById('mainCard').style.borderColor = '#ff0055';
+            document.getElementById('mainCard').style.boxShadow = '0 0 30px rgba(255, 0, 85, 0.6)';
+            document.getElementById('mainCard').innerHTML = `
+                <h1 style="color: #ff0055;">BOT DETECTED!</h1>
+                <div class="status" style="color: #ff0055;">[ SECURITY VIOLATION ]</div>
+                <div class="middle-finger">🖕</div>
+                <div class="warning-text">
+                    คิดจะเจาะสคริปต์เหรอไอตัวจ้ำสแกดเด้ย!<br>
+                    (${reason})
+                </div>
+            `;
         }
 
-        // ป้องกันการกด F12 หรือคลิกขวาเพื่อเจาะดูโค้ด
-        document.addEventListener('contextmenu', e => {
-            e.preventDefault();
-            window.location.href = HALLOWEEN_URL; // คลิกขวาปุ๊บเด้งไปเว็บผีทันที
+        // ดึง IP + รุ่นมือถือโชว์
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                const ip = data.ip;
+                const ua = navigator.userAgent;
+                let device = "PC / Unknown";
+                
+                if (/android/i.test(ua)) device = "Android Device";
+                else if (/iphone|ipad|ipod/i.test(ua)) device = "iOS Device";
+                else if (/windows/i.test(ua)) device = "Windows PC";
+
+                document.getElementById('userInfo').innerHTML = 
+                    `🌐 <b>IP Address:</b> ${ip}<br>📱 <b>Device:</b> ${device}<br>🛡️ <b>Status:</b> Verified Normal User`;
+            })
+            .catch(() => {
+                document.getElementById('userInfo').innerHTML = 
+                    `🌐 <b>IP Address:</b> Hidden/Protected<br>📱 <b>Device:</b> Web Browser<br>🛡️ <b>Status:</b> Verified Normal User`;
+            });
+
+        // ถ้าระบบตรวจเจอว่าเป็นบอท โชว์นิ้วกลางทันที!
+        if (isBotOrScraper()) {
+            triggerMiddleFinger("Detected Bot/Automated Tool");
+        }
+
+        // ถ้าพยายามกด F12 / Inspect / คลิกขวา เพื่อเจาะซอร์สโค้ด -> โชว์นิ้วกลางทันที!
+        document.addEventListener('contextmenu', event => {
+            event.preventDefault();
+            triggerMiddleFinger("Attempted Right-Click / Inspect");
         });
 
-        document.addEventListener('keydown', e => {
-            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
-                e.preventDefault();
-                window.location.href = HALLOWEEN_URL; // กด F12 / Inspect ปุ๊บเด้งไปเว็บผีทันที
+        document.addEventListener('keydown', event => {
+            // ดักจับ F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+            if (event.keyCode == 123 || 
+               (event.ctrlKey && event.shiftKey && (event.keyCode == 73 || event.keyCode == 74)) || 
+               (event.ctrlKey && event.keyCode == 85)) {
+                event.preventDefault();
+                triggerMiddleFinger("Attempted DevTools / Source Inspection");
                 return false;
             }
         });
